@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>AI STUDIO</title>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;width:100%;height:100%;overflow:hidden}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;color:#171717;background:#fff}
+button{font:inherit;border:0;background:none;color:inherit;padding:0;cursor:pointer;touch-action:manipulation}
+.app{height:100dvh;min-height:100%;position:relative;background:#fff}
+
+/* HOME */
+.home{height:100%;display:flex;flex-direction:column;background:#fff}
+.homebar{height:76px;display:flex;align-items:center;justify-content:space-between;padding:12px 24px 8px;flex:none}
+.circle{width:52px;height:52px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 15px rgba(0,0,0,.07)}
+.menu{font-size:30px;line-height:1}
+.plus{height:52px;padding:0 24px;border-radius:28px;background:#fff;box-shadow:0 2px 15px rgba(0,0,0,.07);font-size:18px;color:#5b57b9;white-space:nowrap}
+.plus .star{font-size:24px;margin-right:7px}
+.newchat{font-size:28px}
+
+.home-space{flex:1}
+.suggestions{padding:0 30px 25px;display:flex;flex-direction:column;gap:24px}
+.suggestion{display:flex;align-items:center;gap:22px;color:#5d5d5d;font-size:20px;text-align:left}
+.suggestion .sicon{width:28px;text-align:center;font-size:27px;color:#5a5a5a}
+.composer-wrap{padding:0 24px 22px}
+.composer{height:62px;border-radius:32px;background:#f7f7f7;box-shadow:0 2px 14px rgba(0,0,0,.06);display:flex;align-items:center;padding:5px 7px 5px 15px}
+.add{font-size:35px;font-weight:300;width:40px}
+.ask{flex:1;text-align:left;color:#999;font-size:20px;padding-left:5px}
+.mic{font-size:25px;margin-right:12px}
+.voice{width:50px;height:50px;border-radius:50%;background:#4285ee;color:#fff;font-size:21px;display:flex;align-items:center;justify-content:center}
+
+/* DRAWER */
+.overlay{position:absolute;inset:0;background:rgba(0,0,0,.28);z-index:50;display:none}
+.overlay.open{display:block}
+.drawer{position:absolute;z-index:60;left:0;top:0;bottom:0;width:min(82vw,360px);background:#fff;transform:translateX(-105%);transition:transform .2s ease;padding:26px 22px 14px;display:flex;flex-direction:column;box-shadow:6px 0 22px rgba(0,0,0,.08)}
+.drawer.open{transform:translateX(0)}
+.drawer-head{height:56px;display:flex;align-items:center;justify-content:space-between;margin-bottom:22px}
+.logo{font-size:25px;font-weight:650}
+.search{width:52px;height:52px;border-radius:50%;box-shadow:0 2px 15px rgba(0,0,0,.07);font-size:28px}
+.links{display:flex;flex-direction:column;gap:7px}
+.link{height:51px;display:flex;align-items:center;gap:20px;font-size:21px;text-align:left}
+.linkicon{width:30px;font-size:27px;text-align:center}
+.recents-title{font-size:22px;font-weight:600;margin:28px 0 8px}
+.recents{overflow:auto;flex:1;min-height:80px}
+.recent{display:block;width:100%;text-align:left;font-size:18px;padding:10px 0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.drawer-bottom{display:flex;align-items:center;justify-content:space-between;padding-top:10px}
+.chatbtn{background:#4285ee;color:#fff;border-radius:30px;padding:13px 27px;font-size:20px;display:flex;align-items:center;gap:10px}
+.avatar{width:52px;height:52px;border-radius:50%;background:#34495e;color:#fff;display:grid;place-items:center;font-size:17px}
+
+/* CHAT */
+.chat{position:absolute;inset:0;background:#fff;z-index:40;display:none;flex-direction:column}
+.chat.show{display:flex}
+.chathead{height:66px;display:flex;align-items:center;padding:0 14px;border-bottom:1px solid #eee}
+.back{font-size:32px;width:44px}
+.chattitle{font-size:18px;font-weight:600}
+.messages{flex:1;overflow:auto;padding:18px 14px 100px}
+.message{max-width:760px;margin:0 auto 17px;display:flex}
+.bubble{max-width:88%;padding:11px 14px;border-radius:18px;line-height:1.45;font-size:16px;white-space:pre-wrap}
+.user .bubble{margin-left:auto;background:#eef3fb}
+.ai .bubble{background:#f6f6f6}
+.composer-chat{position:absolute;left:12px;right:12px;bottom:10px}
+.chatbox{height:58px;border-radius:30px;background:#f7f7f7;display:flex;align-items:center;padding:5px 6px 5px 12px;box-shadow:0 2px 12px rgba(0,0,0,.05)}
+.input{flex:1;border:0;outline:0;background:transparent;font-size:16px;padding:8px;resize:none;height:45px}
+.send{width:46px;height:46px;border-radius:50%;background:#111;color:#fff;font-size:21px}
+
+/* smaller phones */
+@media(max-width:390px){
+ .homebar{padding-left:18px;padding-right:18px}
+ .plus{padding:0 18px;font-size:17px}
+ .suggestions{padding-left:25px;padding-right:25px;gap:22px}
+ .suggestion{font-size:18px;gap:18px}
+ .composer-wrap{padding-left:18px;padding-right:18px}
+ .ask{font-size:18px}
+ .drawer{width:80vw;padding-left:22px;padding-right:18px}
+ .link{font-size:19px}
+ .recent{font-size:17px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+<section class="home">
+  <div class="homebar">
+    <button class="circle menu" id="menuBtn" aria-label="Menu">☰</button>
+    <button class="plus" id="plusBtn"><span class="star">✦</span>Get Plus</button>
+    <button class="circle newchat" id="newChatBtn" aria-label="New chat">◔</button>
+  </div>
+
+  <div class="home-space"></div>
+
+  <div class="suggestions">
+    <button class="suggestion" data-text="Create an image"><span class="sicon">▧</span><span>Create an image</span></button>
+    <button class="suggestion" data-text="Write or edit"><span class="sicon">⌁</span><span>Write or edit</span></button>
+    <button class="suggestion" data-text="Search the web"><span class="sicon">◎</span><span>Search the web</span></button>
+  </div>
+
+  <div class="composer-wrap">
+    <div class="composer">
+      <button class="add" id="fileBtn">＋</button>
+      <button class="ask" id="askBtn">Ask AI STUDIO</button>
+      <button class="mic" id="micBtn">♩</button>
+      <button class="voice" id="voiceBtn">▮▮</button>
+    </div>
+  </div>
+</section>
+
+<div class="overlay" id="overlay"></div>
+
+<aside class="drawer" id="drawer">
+  <div class="drawer-head">
+    <div class="logo">AI STUDIO</div>
+    <button class="search" id="searchBtn">⌕</button>
+  </div>
+
+  <div class="links">
+    <button class="link" data-page="Images"><span class="linkicon">▧</span>Images</button>
+    <button class="link" data-page="Library"><span class="linkicon">▥</span>Library</button>
+    <button class="link" data-page="Projects"><span class="linkicon">□</span>Projects</button>
+    <button class="link" data-page="Plugins"><span class="linkicon">◉</span>Plugins</button>
+  </div>
+
+  <div class="recents-title">Recents</div>
+  <div class="recents" id="recents"></div>
+
+  <div class="drawer-bottom">
+    <button class="chatbtn" id="drawerChat">⌁ <span>Chat</span></button>
+    <button class="avatar">AS</button>
+  </div>
+</aside>
+
+<section class="chat" id="chat">
+  <div class="chathead">
+    <button class="back" id="backBtn">‹</button>
+    <div class="chattitle">AI STUDIO</div>
+  </div>
+  <div class="messages" id="messages"></div>
+  <div class="composer-chat">
+    <div class="chatbox">
+      <button class="add" id="chatFileBtn">＋</button>
+      <textarea class="input" id="input" placeholder="Message AI STUDIO..."></textarea>
+      <button class="send" id="sendBtn">↑</button>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<script>
+(function(){
+const $=id=>document.getElementById(id);
+const drawer=$('drawer'), overlay=$('overlay'), chat=$('chat'), messages=$('messages');
+let recent=JSON.parse(localStorage.getItem('aiStudioRecent')||'[]');
+
+function openDrawer(){drawer.classList.add('open');overlay.classList.add('open')}
+function closeDrawer(){drawer.classList.remove('open');overlay.classList.remove('open')}
+function openChat(){closeDrawer();chat.classList.add('show');if(!messages.children.length)ai("Hello! 👋 I’m AI STUDIO. How can I help you?");setTimeout(()=>$('input').focus(),80)}
+function closeChat(){chat.classList.remove('show')}
+
+$('menuBtn').onclick=openDrawer;
+overlay.onclick=closeDrawer;
+$('newChatBtn').onclick=openChat;
+$('askBtn').onclick=openChat;
+$('drawerChat').onclick=openChat;
+$('backBtn').onclick=closeChat;
+$('plusBtn').onclick=()=>alert('AI STUDIO Plus — demo');
+
+document.querySelectorAll('.suggestion').forEach(btn=>{
+ btn.onclick=()=>{openChat();$('input').value=btn.dataset.text;send()}
+});
+
+document.querySelectorAll('.link').forEach(btn=>{
+ btn.onclick=()=>alert(btn.dataset.page+' — AI STUDIO demo');
+});
+
+$('searchBtn').onclick=()=>{
+ let q=prompt('Search recent chats');
+ if(!q)return;
+ let result=recent.filter(x=>x.toLowerCase().includes(q.toLowerCase()));
+ alert(result.length?result.join('\\n'):'No matching chats');
+};
+
+function renderRecent(){
+ $('recents').innerHTML='';
+ if(!recent.length){$('recents').innerHTML='<div class="recent" style="color:#999">No recent chats</div>';return}
+ recent.slice(0,15).forEach(text=>{
+  let b=document.createElement('button');b.className='recent';b.textContent=text;
+  b.onclick=()=>{openChat();addUser(text);setTimeout(()=>ai(reply(text)),350)};
+  $('recents').appendChild(b);
+ });
+}
+renderRecent();
+
+function addUser(text){
+ let row=document.createElement('div');row.className='message user';
+ let b=document.createElement('div');b.className='bubble';b.textContent=text;
+ row.appendChild(b);messages.appendChild(row);messages.scrollTop=messages.scrollHeight;
+}
+function ai(text){
+ let row=document.createElement('div');row.className='message ai';
+ let b=document.createElement('div');b.className='bubble';b.textContent=text;
+ row.appendChild(b);messages.appendChild(row);messages.scrollTop=messages.scrollHeight;
+}
+function reply(t){
+ let x=t.toLowerCase();
+ if(x.includes('youtube'))return 'I can help with YouTube titles, descriptions, hashtags, SEO and Shorts ideas.';
+ if(x.includes('html')||x.includes('code'))return 'Sure! Tell me what you want to build and I can help with HTML, CSS and JavaScript.';
+ if(x.includes('image'))return 'Image creation is ready as a demo UI. Connect your image API/backend for real generation.';
+ if(x.includes('search'))return 'Web search is shown as a demo. Connect a search API for live results.';
+ return 'You said:\\n\\n'+t+'\\n\\nAI STUDIO is running in demo mode. Connect an AI API/backend for real AI answers.';
+}
+function send(){
+ let input=$('input'),text=input.value.trim();if(!text)return;
+ addUser(text);input.value='';
+ recent=[text,...recent.filter(x=>x!==text)].slice(0,15);
+ localStorage.setItem('aiStudioRecent',JSON.stringify(recent));renderRecent();
+ setTimeout(()=>ai(reply(text)),450);
+}
+$('sendBtn').onclick=send;
+$('input').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send()}});
+
+function chooseFile(){
+ let f=document.createElement('input');f.type='file';f.accept='image/*,.pdf,.txt,.doc,.docx';
+ f.onchange=()=>{if(f.files[0]){openChat();addUser('📎 '+f.files[0].name)}};
+ f.click();
+}
+$('fileBtn').onclick=chooseFile;
+$('chatFileBtn').onclick=chooseFile;
+
+function voice(){
+ if(!('webkitSpeechRecognition' in window)){alert('Voice input is not supported in this preview.');return}
+ let r=new webkitSpeechRecognition();r.lang='en-IN';
+ r.onresult=e=>{openChat();$('input').value=e.results[0][0].transcript};
+ r.start();
+}
+$('voiceBtn').onclick=voice;
+$('micBtn').onclick=voice;
+})();
+</script>
+</body>
+  </html>
